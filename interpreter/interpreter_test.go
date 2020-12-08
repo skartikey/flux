@@ -21,6 +21,8 @@ import (
 
 var prelude = `
 import "internal/testutil"
+import "dict"
+get = dict.get
 fail = testutil.fail
 fortyTwo = () => 42.0
 six = () => 6.0
@@ -272,6 +274,16 @@ func TestEval(t *testing.T) {
 				a = [1, 2, 3]
 				x = a[1]
 				x == 2 or fail()
+			`,
+		},
+		{
+			name: "dict expression",
+			query: `
+				m = ["a" + "b": 0, "c" + "d": 1]
+				x = get(dict: m, key: "ab", default: 2)
+				y = get(dict: m, key: "cd", default: 2)
+				z = get(dict: m, key: "ef", default: 2)
+				x == 0 and y == 1 and z == 2 or fail()
 			`,
 		},
 		{
